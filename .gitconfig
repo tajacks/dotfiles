@@ -1,0 +1,7 @@
+[init]
+	defaultBranch = main
+[user]
+	name = Thomas Jack
+	email = tom@tomjack.ca
+[core]
+	editor = subl -n -w

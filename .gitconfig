@@ -3,5 +3,8 @@
 [user]
 	name = Thomas Jack
 	email = tom@tomjack.ca
+	signingkey = 0x1EBC7EB457F78C48
 [core]
 	editor = subl -n -w
+[commit]
+	gpgSign = true

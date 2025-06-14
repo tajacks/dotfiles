@@ -8,3 +8,5 @@
 	editor = subl -n -w
 [commit]
 	gpgSign = true
+[push]
+	autoSetupRemote = true

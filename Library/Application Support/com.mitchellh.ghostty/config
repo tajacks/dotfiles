@@ -1,0 +1,58 @@
+# Ghostty Terminal Configuration
+
+# =============================================================================
+# APPEARANCE
+# =============================================================================
+
+# Theme and color scheme
+theme = "GitHub Dark Dimmed"
+
+# Font configuration
+font-family = "JetBrains Mono"
+font-size = 14
+
+# OpenType font features for enhanced typography
+font-feature = calt    # Contextual alternates
+font-feature = liga    # Standard ligatures  
+font-feature = zero    # Slashed zero
+font-feature = ss01    # Stylistic set 1
+font-feature = ss02    # Stylistic set 2
+font-feature = ss03    # Stylistic set 3
+font-feature = ss04    # Stylistic set 4
+font-feature = ss07    # Stylistic set 7
+font-feature = ss08    # Stylistic set 8
+
+# Cursor appearance
+cursor-style = underline
+
+# =============================================================================
+# BEHAVIOR
+# =============================================================================
+
+# Clipboard and selection
+copy-on-select = clipboard
+clipboard-paste-protection = true
+
+# Window and session management
+confirm-close-surface = true
+
+# Link handling
+link-previews = false
+link-url = true
+
+# Input behaviour
+mouse-hide-while-typing = true
+
+# =============================================================================
+# QUICK TERMINAL
+# =============================================================================
+
+quick-terminal-position = top
+quick-terminal-screen = main
+quick-terminal-animation-duration = 200
+
+# =============================================================================
+# SYSTEM
+# =============================================================================
+
+auto-update = check

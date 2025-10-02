@@ -35,6 +35,7 @@ clipboard-paste-protection = true
 
 # Window and session management
 confirm-close-surface = true
+window-inherit-working-directory = false
 
 # Link handling
 link-previews = false

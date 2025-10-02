@@ -3,7 +3,9 @@
 !.gitignore
 !.gitconfig
 !.config/
+!Library
+Library/*
 !Library/Application Support/
 Library/Application Support/*
 !Library/Application Support/Sublime*
-!Library/Application Support/com.mitchellh.ghostty/*
+!Library/Application Support/com.mitchellh.ghostty/

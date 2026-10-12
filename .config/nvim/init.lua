@@ -171,7 +171,7 @@ require('mason-tool-installer').setup { ensure_installed = tools }
 -- [[ Treesitter ]]
 -- Neovim bundles parsers for Lua, Markdown, Vimscript and help files
 local treesitter = require 'nvim-treesitter'
-local parsers = { 'json', 'yaml' }
+local parsers = { 'json', 'yaml', 'gleam' }
 vim.treesitter.language.register('json', 'jsonc')
 
 local function treesitter_attach(buf)
@@ -214,7 +214,7 @@ end
 
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('treesitter-attach', { clear = true }),
-  pattern = { 'json', 'jsonc', 'yaml' },
+  pattern = { 'json', 'jsonc', 'yaml', 'gleam' },
   callback = function(args)
     treesitter_attach(args.buf)
   end,
@@ -268,9 +268,19 @@ vim.lsp.config('yamlls', {
   },
 })
 
+-- The server is part of the Gleam toolchain, which Mason does not provide
+vim.lsp.config('gleam', {
+  cmd = { 'gleam', 'lsp' },
+  filetypes = { 'gleam' },
+  root_markers = { 'gleam.toml', '.git' },
+})
+
 local servers = { 'lua_ls', 'stylua' }
 if has_node then
   vim.list_extend(servers, { 'jsonls', 'yamlls' })
+end
+if vim.fn.executable 'gleam' == 1 then
+  table.insert(servers, 'gleam')
 end
 vim.lsp.enable(servers)
 
@@ -293,7 +303,7 @@ end, { desc = 'Format buffer' })
 
 vim.api.nvim_create_autocmd('BufWritePre', {
   group = vim.api.nvim_create_augroup('format-on-save', { clear = true }),
-  pattern = '*.lua',
+  pattern = { '*.lua', '*.gleam' },
   callback = function(args)
     format(args.buf)
   end,

@@ -633,6 +633,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'tree-sitter-cli', -- Builds treesitter parsers
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -858,27 +859,81 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    branch = 'main',
+    lazy = false, -- Lazy-loading is unsupported
+    dependencies = { 'mason-org/mason.nvim' }, -- Puts the `tree-sitter` CLI on the PATH
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    config = function()
+      local treesitter = require 'nvim-treesitter'
+
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+
+      -- Building a parser needs the `tree-sitter` CLI
+      local function can_install()
+        return vim.fn.executable 'tree-sitter' == 1
+      end
+
+      if can_install() then
+        treesitter.install(parsers)
+      else
+        -- First launch: Mason is still installing the CLI
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'MasonToolsUpdateCompleted',
+          once = true,
+          callback = function()
+            if can_install() then
+              treesitter.install(parsers)
+            end
+          end,
+        })
+      end
+
+      ---@param buf integer
+      ---@param language string
+      local function treesitter_try_attach(buf, language)
+        -- The buffer may be gone by the time an install finishes
+        if not vim.api.nvim_buf_is_valid(buf) then
+          return
+        end
+
+        -- No parser for this language
+        if not vim.treesitter.language.add(language) then
+          return
+        end
+
+        vim.treesitter.start(buf, language)
+
+        -- Languages without an indent query keep Vim's indent
+        if vim.treesitter.query.get(language, 'indents') ~= nil then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end
+
+      local available_parsers = treesitter.get_available()
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('kickstart-treesitter-attach', { clear = true }),
+        callback = function(args)
+          local buf, filetype = args.buf, args.match
+
+          local language = vim.treesitter.language.get_lang(filetype)
+          if not language then
+            return
+          end
+
+          if vim.tbl_contains(treesitter.get_installed 'parsers', language) then
+            treesitter_try_attach(buf, language)
+          elseif vim.tbl_contains(available_parsers, language) and can_install() then
+            -- Autoinstall, then attach
+            treesitter.install(language):await(function()
+              treesitter_try_attach(buf, language)
+            end)
+          else
+            -- The parser may have been installed outside nvim-treesitter
+            treesitter_try_attach(buf, language)
+          end
+        end,
+      })
+    end,
   },
 
   -- Pull in custom plugins

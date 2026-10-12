@@ -148,8 +148,18 @@ require('neo-tree').setup {
 }
 vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle reveal<CR>', { desc = 'File explorer' })
 
+-- [[ Manual ]]
+-- doc/manual.txt is this config's own help page
+local doc = vim.fn.stdpath 'config' .. '/doc'
+local manual, tags = vim.uv.fs_stat(doc .. '/manual.txt'), vim.uv.fs_stat(doc .. '/tags')
+if manual and (not tags or tags.mtime.sec < manual.mtime.sec) then
+  vim.cmd.helptags(doc)
+end
+vim.keymap.set('n', '<leader>?', '<cmd>help manual<CR>', { desc = 'Manual' })
+
 -- [[ Editing ]]
 require('guess-indent').setup {}
+require('mini.pairs').setup() -- Gleam only shows signature help inside a closed call
 
 -- [[ External tools ]]
 -- Mason installs these into Neovim's data directory and puts them on the PATH

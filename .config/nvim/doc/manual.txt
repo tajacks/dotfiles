@@ -1,0 +1,223 @@
+*manual.txt*      How I use this Neovim config
+
+NEOVIM MANUAL                                                         *manual*
+
+Open this page with `<Space>?` or `:help manual`.
+
+`<Space>e` means press Space, then e. `<C-o>` means Ctrl+o. `<CR>` is Enter.
+Anything starting with `:` is typed and run with Enter. Keys work from normal
+mode unless stated, so press `<Esc>` first if in doubt.
+
+Press `<C-]>` on a link to follow it, and `<C-o>` to come back.
+
+    Jot down a quick note ............................ |manual-note|
+    Read and edit JSON or YAML ....................... |manual-json|
+    Work in a project ................................ |manual-project|
+    The file tree .................................... |manual-tree|
+    Gleam and Lua .................................... |manual-code|
+    Find things ...................................... |manual-find|
+    Get out of a jam ................................. |manual-jam|
+    Keep it updated .................................. |manual-update|
+    Requirements ..................................... |manual-requirements|
+
+==============================================================================
+JOT DOWN A QUICK NOTE                                            *manual-note*
+
+>
+    nvim              an unnamed scratch buffer
+    nvim notes.txt    a named file
+<
+To                                          Press~
+Start typing                                `i`
+Stop typing                                 `<Esc>`
+Save                                        `:w`
+Save a scratch buffer under a name          `:w ~/notes.txt`
+Save and quit                               `ZZ`
+Quit and discard                            `:q!`
+Copy a line                                 `yy`
+Copy a selection                            `v`  move  `y`
+Select whole lines instead                  `V`
+Paste                                       `p`
+Undo, redo                                  `u`  `<C-r>`
+Find text                                   `/text`  then  `n`  `N`
+Clear the search highlight                  `<Esc>`
+Rewrap a paragraph                          `gqap`
+Start another empty buffer                  `:enew`
+
+- Copy and paste share the system clipboard: `yy` here pastes with Cmd+V
+  elsewhere, and `p` pastes what you copied elsewhere.
+- Undo history survives closing the file.
+- A lowercase search ignores case. One capital letter makes it exact.
+- Lines wrap at 120 characters as you type.
+- Words already in the file are offered as you type: `<C-y>` accepts,
+  `<C-e>` dismisses.
+- Brackets and quotes close themselves. Type the closing character to step
+  over it. Backspace on an empty pair removes both.
+
+==============================================================================
+READ AND EDIT JSON OR YAML                         *manual-json* *manual-yaml*
+
+Errors show at the end of the offending line as you type. That needs Node.
+Without it you still get colours, folding and indent.
+
+To                                          Press~
+Format the file, or expand minified JSON    `<Space>f`
+Jump to the next, previous error            `]d`  `[d`
+Read the full error                         `<C-w>d`
+List every error in the file                `<Space>q`  then  `<CR>`  jumps
+Outline of keys                             `gO`  then  `<CR>`  jumps
+Fold or unfold the block under the cursor   `za`
+Fold everything, unfold everything          `zM`  `zR`
+Jump to the matching bracket                `%`
+Select the value under the cursor           `van`
+Grow, shrink that selection                 `an`  `in`
+Indent, dedent a line                       `>>`  `<<`
+Indent, dedent a selection                  `>`  `<`
+Comment a YAML line                         `gcc`
+Move through completions                    `<C-n>`  `<C-p>`
+Accept a completion                         `<C-y>`
+
+- Saving does not reformat these files. Only `<Space>f` does.
+- Indentation follows the file you opened. New files use two spaces. If the
+  guess is wrong, run `:GuessIndent`.
+
+==============================================================================
+WORK IN A PROJECT                                             *manual-project*
+
+Start Neovim from the project folder: >
+    cd project && nvim
+<
+To                                          Press~
+Open or close the file tree                 `<Space>e`
+Move between tree and file                  `<C-h>`  `<C-l>`
+Move between any windows                    `<C-h>` `<C-j>` `<C-k>` `<C-l>`
+Split the window side by side               `:vs`
+Close a window                              `:q`
+Switch between open files                   `<Space><Space>`
+Close a file                                `:bd`
+Open a terminal                             `:terminal`  then  `i`  to type
+Leave the terminal's typing mode            `<Esc><Esc>`
+
+------------------------------------------------------------------------------
+The file tree                                                    *manual-tree*
+
+To                                          Press~
+Open a file, expand a folder                `<CR>`
+Open beside the current file                `s`
+Open below the current file                 `S`
+New file                                    `a`
+New folder                                  `a`  and end the name with /
+Rename                                      `r`
+Move                                        `m`
+Copy                                        `c`
+Delete                                      `d`
+Filter by name                              `/`
+Show or hide hidden files                   `H`
+List every tree key                         `?`
+
+------------------------------------------------------------------------------
+Gleam and Lua                                                    *manual-code*
+
+To                                          Press~
+Show documentation                          `K`
+Go to definition                            `grd`
+Come back                                   `<C-o>`
+List references                             `grr`
+Rename everywhere                           `grn`
+Quick fix                                   `gra`
+Outline of the file                         `gO`
+Comment a line, a selection                 `gcc`  `gc`
+Hide or reopen the parameter popup          `<C-k>`  while typing
+
+- Saving formats Gleam and Lua files.
+- A popup showing a function's parameters opens when you type ( and stays
+  open as you add arguments.
+
+==============================================================================
+FIND THINGS                                                      *manual-find*
+
+To find                                     Press~
+A file by name                              `<Space>sf`
+Text anywhere in the project                `<Space>sg`
+Text in this file                           `<Space>/`
+A file you opened recently                  `<Space>s.`
+A file that is already open                 `<Space><Space>`
+Errors across open files                    `<Space>sd`
+The last search again                       `<Space>sr`
+The next use of the word under the cursor   `*`
+A line number                               `:42`
+Top, bottom of the file                     `gg`  `G`
+Where you were before, and forward again    `<C-o>`  `<C-i>`
+
+------------------------------------------------------------------------------
+Inside a search list                                      *manual-search-list*
+
+To                                          Press~
+Narrow the list                             type
+Move                                        `<C-n>`  `<C-p>`
+Open                                        `<CR>`
+Open in a side split                        `<C-v>`
+Preview                                     `<Tab>`
+Cancel                                      `<Esc>`
+
+==============================================================================
+GET OUT OF A JAM                                                  *manual-jam*
+
+Problem                                     Press~
+No idea what mode this is                   `<Esc>`  twice
+Forgot a key                                `<Space>`  shows a menu
+                                            so do  `g`  `z`  `[`  `]`  `<C-w>`
+Looking for a key by what it does           `<Space>sk`
+Looking for a command                       `<Space>sc`
+Need the documentation                      `<Space>sh`  or  `:help topic`
+Need this manual                            `<Space>?`
+Made a mistake                              `u`
+Want the file as it was on disk             `:e!`
+Want out without saving anything            `:qa!`
+Jumped somewhere unexpected                 `<C-o>`
+Everything is folded                        `zR`
+Search highlight is stuck                   `<Esc>`
+Stuck in a terminal window                  `<Esc><Esc>`  then  `:q`
+Stuck in a search list or menu              `<Esc>`
+Pressed q and a letter by accident          `q`
+                                            that had started recording a macro
+A window of old commands opened             `:q`
+                                            that was  `q:`
+Neovim vanished to the shell                type  fg
+                                            that was  `<C-z>`
+An error flashed past                       `:messages`
+Something seems broken                      `:checkhealth`
+Want a clean restart                        `:restart`
+
+==============================================================================
+KEEP IT UPDATED                                                *manual-update*
+
+To                                          Do~
+Update plugins                              `<Space>pu`
+Update language servers and tools           `:MasonToolsUpdate`
+Edit this config or this manual             `<Space>sn`
+
+A plugin update opens a list of changes. `:w` applies them and `:q` discards
+them. Run `:restart` afterwards, then commit nvim-pack-lock.json.
+
+To undo a bad plugin update, restore nvim-pack-lock.json from git, run
+`:restart`, then: >vim
+    :lua vim.pack.update(nil, { offline = true, target = 'lockfile' })
+<
+==============================================================================
+REQUIREMENTS                                             *manual-requirements*
+
+Plugins, language servers and parsers install themselves on first launch.
+The machine has to provide:
+
+- Xcode Command Line Tools, for git and a C compiler.
+- A Nerd Font in the terminal, for icons.
+- ripgrep, for `<Space>sf` and `<Space>sg` outside git repositories. Without
+  it, both still work inside a git repository.
+- Node, for JSON and YAML errors, formatting and completion.
+- Gleam, for Gleam files.
+
+Without Node or Gleam, that language falls back to colours, folding and
+indent.
+
+ vim:tw=78:ts=8:sw=4:sts=4:et:ft=help:norl:

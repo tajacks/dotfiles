@@ -1,6 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR ASDF_DATA_DIR:/Users/thomasjack/\x2easdf
+SETUVAR ERL_AFLAGS:\x2dkernel\x20shell_history\x20enabled
 SETUVAR __fish_initialized:3800
 SETUVAR fish_color_autosuggestion:brblack
 SETUVAR fish_color_cancel:\x2dr

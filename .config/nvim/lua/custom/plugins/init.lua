@@ -41,20 +41,18 @@ return {
     config = function()
       local elixir = require 'elixir'
       local elixirls = require 'elixir.elixirls'
-
       elixir.setup {
         nextls = {
-          enable = true,
-          init_options = {
-            experimental = {
-              completions = {
-                enable = true, -- Enable auto-completions
-              },
-            },
-          },
+          enable = false,
         },
         elixirls = {
-          enable = false,
+          enable = true,
+          settings = elixirls.settings {
+            dialyzerEnabled = true,
+            fetchDeps = false,
+            enableTestLenses = false,
+            suggestSpecs = false,
+          },
         },
         projectionist = {
           enable = false,

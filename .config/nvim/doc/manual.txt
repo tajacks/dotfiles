@@ -97,6 +97,11 @@ Switch between open files                   `<Space><Space>`
 Close a file                                `:bd`
 Open a terminal                             `:terminal`  then  `i`  to type
 Leave the terminal's typing mode            `<Esc><Esc>`
+Jump to the next, previous changed line     `]h`  `[h`
+Undo the change under the cursor            `gHgh`
+
+Lines changed since the last git commit are marked in the left margin:
++ added, ~ changed, _ deleted.
 
 ------------------------------------------------------------------------------
 The file tree                                                    *manual-tree*

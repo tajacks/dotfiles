@@ -161,6 +161,14 @@ vim.keymap.set('n', '<leader>?', '<cmd>help manual<CR>', { desc = 'Manual' })
 require('guess-indent').setup {}
 require('mini.pairs').setup() -- Gleam only shows signature help inside a closed call
 
+-- Marks lines changed since the last git commit
+require('mini.diff').setup {
+  view = {
+    style = 'sign',
+    signs = { add = '+', change = '~', delete = '_' },
+  },
+}
+
 -- [[ External tools ]]
 -- Mason installs these into Neovim's data directory and puts them on the PATH
 require('mason').setup()
